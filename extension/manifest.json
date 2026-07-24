@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "WriteFlow — AI Writing Assistant",
+  "version": "1.0.0",
+  "description": "AI-powered writing assistant that works in any text field on any website. Rewrite, fix grammar, translate, and more.",
+  "permissions": ["contextMenus", "storage", "activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "all_frames": true,
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "WriteFlow",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

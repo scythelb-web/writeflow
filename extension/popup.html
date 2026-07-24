@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WriteFlow</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      width: 380px;
+      min-height: 400px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f1a;
+      color: #e0e0e0;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      padding: 16px 20px;
+      border-bottom: 1px solid #2a2a4a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #00d4aa, #00b4d8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      background: #00d4aa22;
+      color: #00d4aa;
+    }
+    
+    .badge.pro { background: #7c3aed22; color: #a78bfa; }
+    
+    .main { padding: 16px; }
+    
+    .section { margin-bottom: 16px; }
+    .section-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+      margin-bottom: 8px;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 100px;
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      color: #e0e0e0;
+      padding: 12px;
+      font-size: 13px;
+      font-family: inherit;
+      resize: vertical;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: #00d4aa;
+    }
+    
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    
+    button {
+      padding: 10px 14px;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      background: #1a1a2e;
+      color: #e0e0e0;
+      cursor: pointer;
+      font-size: 12px;
+      font-family: inherit;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    
+    button:hover {
+      border-color: #00d4aa;
+      background: #00d4aa11;
+    }
+    
+    button.primary {
+      background: linear-gradient(135deg, #00d4aa, #00b4d8);
+      border: none;
+      color: #0f0f1a;
+      font-weight: 600;
+      grid-column: span 2;
+      margin-top: 4px;
+    }
+    
+    button.primary:hover {
+      opacity: 0.9;
+    }
+    
+    button:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    
+    .result {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      min-height: 50px;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+    
+    .result.empty { color: #555; font-style: italic; }
+    
+    .copy-btn {
+      margin-top: 8px;
+      font-size: 11px;
+      padding: 6px 12px;
+      float: right;
+    }
+    
+    .status {
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-align: center;
+      margin-top: 8px;
+    }
+    
+    .status.error { background: #ff444422; color: #ff6666; }
+    .status.success { background: #00d4aa22; color: #00d4aa; }
+    
+    .settings-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    input[type="text"], input[type="password"] {
+      flex: 1;
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      color: #e0e0e0;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-family: inherit;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #00d4aa;
+    }
+    
+    .hidden { display: none; }
+    
+    .usage-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #888;
+    }
+    
+    .usage-dots {
+      display: flex;
+      gap: 3px;
+    }
+    
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2a2a4a;
+    }
+    
+    .dot.used { background: #00d4aa; }
+    
+    .upgrade-link {
+      font-size: 11px;
+      text-align: center;
+      margin-top: 12px;
+      color: #a78bfa;
+      cursor: pointer;
+    }
+    
+    .upgrade-link:hover { text-decoration: underline; }
+    
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 16px;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 8px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      border-bottom: 2px solid #2a2a4a;
+      color: #888;
+    }
+    
+    .tab.active {
+      border-bottom-color: #00d4aa;
+      color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="logo">WriteFlow</span>
+    <span class="badge" id="planBadge">FREE</span>
+  </div>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="write">Write</div>
+    <div class="tab" data-tab="settings">Settings</div>
+  </div>
+  
+  <div class="main">
+    <!-- Write Tab -->
+    <div id="writeTab">
+      <div class="section">
+        <div class="section-title">Your Text</div>
+        <textarea id="inputText" placeholder="Paste or type text here..."></textarea>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">Action</div>
+        <div class="actions">
+          <button onclick="process('rewrite')">✨ Professional</button>
+          <button onclick="process('casual')">💬 Casual</button>
+          <button onclick="process('grammar')">✓ Fix Grammar</button>
+          <button onclick="process('shorten')">📝 Shorter</button>
+          <button onclick="process('expand')">📖 Expand</button>
+          <button onclick="process('translate')">🌐 → English</button>
+        </div>
+        <button class="primary" onclick="process('rewrite')" id="quickBtn">Rewrite Professionally →</button>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">Result</div>
+        <div class="result empty" id="result">Your rewritten text will appear here...</div>
+        <button class="copy-btn" onclick="copyResult()" id="copyBtn" style="display:none">📋 Copy</button>
+      </div>
+      
+      <div class="status hidden" id="status"></div>
+      
+      <div class="usage-bar" style="margin-top:12px">
+        <span>Free: </span>
+        <div class="usage-dots" id="usageDots"></div>
+        <span id="usageLabel"></span>
+      </div>
+      
+      <div class="upgrade-link" id="upgradeLink">⚡ Upgrade to Pro — $5/mo unlimited</div>
+    </div>
+    
+    <!-- Settings Tab -->
+    <div id="settingsTab" class="hidden">
+      <div class="section">
+        <div class="section-title">OpenAI API Key</div>
+        <input type="password" id="apiKey" placeholder="sk-...">
+        <div style="font-size:10px;color:#666;margin-top:4px">
+          Your key is stored locally and sent directly to OpenAI. Get one at platform.openai.com/api-keys
+        </div>
+        <button onclick="saveKey()" style="margin-top:8px;width:100%">Save Key</button>
+      </div>
+      
+      <div class="section">
+        <div class="section-title">Pro License</div>
+        <input type="text" id="licenseKey" placeholder="Enter license key...">
+        <button onclick="activateLicense()" style="margin-top:8px;width:100%">Activate</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
