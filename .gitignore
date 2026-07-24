@@ -1,1 +1,8 @@
-backend/venv/\nbackend/writeflow.db\nbackend/__pycache__/\n*.pyc\n.env
+backend/venv/
+backend/__pycache__/
+backend/*.db
+backend/*.db-shm
+backend/*.db-wal
+*.pyc
+__pycache__/
+.env
