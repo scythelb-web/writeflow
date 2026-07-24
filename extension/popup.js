@@ -15,13 +15,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
   
-  // Upgrade link
-  document.getElementById('upgradeLink').addEventListener('click', () => {
-    document.querySelector('.tab[data-tab="settings"]').click();
+  // Action buttons
+  document.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => process(btn.dataset.action));
   });
   
   // Quick rewrite button
   document.getElementById('quickBtn').addEventListener('click', () => process('rewrite'));
+  
+  // Copy button
+  document.getElementById('copyBtn').addEventListener('click', copyResult);
+  
+  // Settings: Save API key
+  document.getElementById('saveKeyBtn').addEventListener('click', saveKey);
+  
+  // Settings: Activate license
+  document.getElementById('activateLicenseBtn').addEventListener('click', activateLicense);
+  
+  // Upgrade link
+  document.getElementById('upgradeLink').addEventListener('click', () => {
+    document.querySelector('.tab[data-tab="settings"]').click();
+  });
 });
 
 async function loadState() {
@@ -49,8 +63,6 @@ async function activateLicense() {
   const key = document.getElementById('licenseKey').value.trim();
   if (!key) return showStatus('Please enter a license key', 'error');
   
-  // In production, this would validate against the backend
-  // For now, store locally
   await chrome.storage.local.set({ license_key: key });
   
   document.getElementById('planBadge').textContent = 'PRO';
@@ -61,18 +73,15 @@ async function activateLicense() {
 async function process(action) {
   const text = document.getElementById('inputText').value.trim();
   if (!text) {
-    // Try to get text from active tab
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (tab) {
       try {
         const response = await chrome.tabs.sendMessage(tab.id, { type: 'WRITEFLOW_GET_SELECTION' });
         if (response && response.text) {
           document.getElementById('inputText').value = response.text;
-          return process(action); // Retry with the text
+          return process(action);
         }
-      } catch (e) {
-        // Can't get selection from popup context
-      }
+      } catch (e) {}
     }
     return showStatus('Please enter or select some text first', 'error');
   }
@@ -82,7 +91,7 @@ async function process(action) {
   resultDiv.classList.remove('empty');
   
   document.getElementById('quickBtn').disabled = true;
-  document.querySelectorAll('.actions button').forEach(b => b.disabled = true);
+  document.querySelectorAll('[data-action]').forEach(b => b.disabled = true);
   
   try {
     const response = await chrome.runtime.sendMessage({
@@ -107,7 +116,7 @@ async function process(action) {
   }
   
   document.getElementById('quickBtn').disabled = false;
-  document.querySelectorAll('.actions button').forEach(b => b.disabled = false);
+  document.querySelectorAll('[data-action]').forEach(b => b.disabled = false);
 }
 
 function copyResult() {

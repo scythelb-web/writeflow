@@ -244,20 +244,20 @@
       <div class="section">
         <div class="section-title">Action</div>
         <div class="actions">
-          <button onclick="process('rewrite')">✨ Professional</button>
-          <button onclick="process('casual')">💬 Casual</button>
-          <button onclick="process('grammar')">✓ Fix Grammar</button>
-          <button onclick="process('shorten')">📝 Shorter</button>
-          <button onclick="process('expand')">📖 Expand</button>
-          <button onclick="process('translate')">🌐 → English</button>
+          <button data-action="rewrite">✨ Professional</button>
+          <button data-action="casual">💬 Casual</button>
+          <button data-action="grammar">✓ Fix Grammar</button>
+          <button data-action="shorten">📝 Shorter</button>
+          <button data-action="expand">📖 Expand</button>
+          <button data-action="translate">🌐 → English</button>
         </div>
-        <button class="primary" onclick="process('rewrite')" id="quickBtn">Rewrite Professionally →</button>
+        <button class="primary" id="quickBtn">Rewrite Professionally →</button>
       </div>
       
       <div class="section">
         <div class="section-title">Result</div>
         <div class="result empty" id="result">Your rewritten text will appear here...</div>
-        <button class="copy-btn" onclick="copyResult()" id="copyBtn" style="display:none">📋 Copy</button>
+        <button class="copy-btn" id="copyBtn" style="display:none">📋 Copy</button>
       </div>
       
       <div class="status hidden" id="status"></div>
@@ -279,13 +279,13 @@
         <div style="font-size:10px;color:#666;margin-top:4px">
           Your key is stored locally and sent directly to OpenAI. Get one at platform.openai.com/api-keys
         </div>
-        <button onclick="saveKey()" style="margin-top:8px;width:100%">Save Key</button>
+        <button id="saveKeyBtn" style="margin-top:8px;width:100%">Save Key</button>
       </div>
       
       <div class="section">
         <div class="section-title">Pro License</div>
         <input type="text" id="licenseKey" placeholder="Enter license key...">
-        <button onclick="activateLicense()" style="margin-top:8px;width:100%">Activate</button>
+        <button id="activateLicenseBtn" style="margin-top:8px;width:100%">Activate</button>
       </div>
     </div>
   </div>
